@@ -56,7 +56,7 @@ pub struct Server<N: Network, E: Environment> {
     status: Status,
     /// The list of peers for the node.
     peers: Arc<Peers<N, E>>,
-    /// The prover of the node.
+    /// The ledger of the node.
     ledger: Arc<Ledger<N, E>>,
     /// The prover of the node.
     prover: Arc<Prover<N, E>>,
@@ -104,7 +104,7 @@ impl<N: Network, E: Environment> Server<N, E> {
         let prover = Prover::open::<RocksDB, _>(
             &mut tasks,
             &prover_storage_path,
-            miner.clone(),
+            miner,
             local_ip,
             &status,
             &terminator,
@@ -174,7 +174,7 @@ impl<N: Network, E: Environment> Server<N, E> {
         )
         .await;
         // Initialize a new instance of the notification.
-        Self::initialize_notification(&mut tasks, ledger.reader(), prover.clone(), miner.clone()).await;
+        Self::initialize_notification(&mut tasks, ledger.reader(), prover.clone(), miner).await;
 
         Ok(Self {
             local_ip,
@@ -392,7 +392,7 @@ impl<N: Network, E: Environment> Server<N, E> {
             // Notify the outer function that the task is ready.
             let _ = router.send(());
             loop {
-                info!("{}", notification_message(miner.clone()));
+                info!("{}", notification_message(miner));
 
                 if E::NODE_TYPE == NodeType::Miner {
                     if let Some(miner) = miner {

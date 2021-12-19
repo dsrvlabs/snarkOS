@@ -27,8 +27,6 @@ use crate::{
     PoolRouter,
     ProverRequest,
     ProverRouter,
-    WorkerRequest,
-    WorkerRouter,
 };
 use snarkvm::dpc::prelude::*;
 
@@ -70,25 +68,22 @@ type ConnectionResult = oneshot::Sender<Result<()>>;
 ///
 #[derive(Debug)]
 pub enum PeersRequest<N: Network, E: Environment> {
-    /// Connect := (peer_ip, ledger_reader, ledger_router, prover_router, pool_router, connection_result, worker_router)
+    /// Connect := (peer_ip, ledger_reader, ledger_router, prover_router, pool_router, connection_result)
     Connect(
         SocketAddr,
         LedgerReader<N>,
         LedgerRouter<N>,
         ProverRouter<N>,
         PoolRouter<N>,
-        WorkerRouter<N>,
         ConnectionResult,
     ),
-    /// Heartbeat := (ledger_reader, ledger_router, prover_router, pool_router,
-    /// worker_router)
-    Heartbeat(LedgerReader<N>, LedgerRouter<N>, ProverRouter<N>, PoolRouter<N>, WorkerRouter<N>),
+    /// Heartbeat := (ledger_reader, ledger_router, prover_router, pool_router)
+    Heartbeat(LedgerReader<N>, LedgerRouter<N>, ProverRouter<N>, PoolRouter<N>),
     /// MessagePropagate := (peer_ip, message)
     MessagePropagate(SocketAddr, Message<N, E>),
     /// MessageSend := (peer_ip, message)
     MessageSend(SocketAddr, Message<N, E>),
-    /// PeerConnecting := (stream, peer_ip, ledger_reader, ledger_router, prover_router,
-    /// pool_router, worker_router)
+    /// PeerConnecting := (stream, peer_ip, ledger_reader, ledger_router, prover_router, pool_router)
     PeerConnecting(
         TcpStream,
         SocketAddr,
@@ -96,7 +91,6 @@ pub enum PeersRequest<N: Network, E: Environment> {
         LedgerRouter<N>,
         ProverRouter<N>,
         PoolRouter<N>,
-        WorkerRouter<N>,
     ),
     /// PeerConnected := (peer_ip, peer_nonce, outbound_router)
     PeerConnected(SocketAddr, u64, OutboundRouter<N, E>),
@@ -279,7 +273,7 @@ impl<N: Network, E: Environment> Peers<N, E> {
     ///
     pub(super) async fn update(&self, request: PeersRequest<N, E>) {
         match request {
-            PeersRequest::Connect(peer_ip, ledger_reader, ledger_router, prover_router, pool_router, worker_router, connection_result) => {
+            PeersRequest::Connect(peer_ip, ledger_reader, ledger_router, prover_router, pool_router, connection_result) => {
                 // Ensure the peer IP is not this node.
                 if peer_ip == self.local_ip
                     || (peer_ip.ip().is_unspecified() || peer_ip.ip().is_loopback()) && peer_ip.port() == self.local_ip.port()
@@ -330,7 +324,6 @@ impl<N: Network, E: Environment> Peers<N, E> {
                                         ledger_router,
                                         prover_router,
                                         pool_router,
-                                        worker_router,
                                         self.connected_nonces().await,
                                         Some(connection_result),
                                     )
@@ -349,7 +342,7 @@ impl<N: Network, E: Environment> Peers<N, E> {
                     }
                 }
             }
-            PeersRequest::Heartbeat(ledger_reader, ledger_router, prover_router, pool_router, worker_router) => {
+            PeersRequest::Heartbeat(ledger_reader, ledger_router, prover_router, pool_router) => {
                 // Obtain the number of connected peers.
                 let number_of_connected_peers = self.number_of_connected_peers().await;
                 // Ensure the number of connected peers is below the maximum threshold.
@@ -447,7 +440,6 @@ impl<N: Network, E: Environment> Peers<N, E> {
                             ledger_router.clone(),
                             prover_router.clone(),
                             pool_router.clone(),
-                            worker_router.clone(),
                             router,
                         );
                         if let Err(error) = self.peers_router.send(request).await {
@@ -466,7 +458,7 @@ impl<N: Network, E: Environment> Peers<N, E> {
             PeersRequest::MessageSend(sender, message) => {
                 self.send(sender, message).await;
             }
-            PeersRequest::PeerConnecting(stream, peer_ip, ledger_reader, ledger_router, prover_router, pool_router, worker_router) => {
+            PeersRequest::PeerConnecting(stream, peer_ip, ledger_reader, ledger_router, prover_router, pool_router) => {
                 // Ensure the peer IP is not this node.
                 if peer_ip == self.local_ip
                     || (peer_ip.ip().is_unspecified() || peer_ip.ip().is_loopback()) && peer_ip.port() == self.local_ip.port()
@@ -538,7 +530,6 @@ impl<N: Network, E: Environment> Peers<N, E> {
                             ledger_router,
                             prover_router,
                             pool_router,
-                            worker_router,
                             self.connected_nonces().await,
                             None,
                         )
@@ -911,7 +902,6 @@ impl<N: Network, E: Environment> Peer<N, E> {
         ledger_router: LedgerRouter<N>,
         prover_router: ProverRouter<N>,
         pool_router: PoolRouter<N>,
-        worker_router: WorkerRouter<N>,
         connected_nonces: Vec<u64>,
         connection_result: Option<ConnectionResult>,
     ) {
@@ -1288,7 +1278,7 @@ impl<N: Network, E: Environment> Peer<N, E> {
                                         trace!("Skipping 'BlockTemplate' from {}", peer_ip);
                                     } else {
                                         if let Ok(block_template) = block_template.deserialize().await {
-                                            if let Err(error) = worker_router.send(WorkerRequest::BlockTemplate(peer_ip, share_difficulty, block_template)).await {
+                                            if let Err(error) = prover_router.send(ProverRequest::BlockTemplate(peer_ip, share_difficulty, block_template)).await {
                                                 warn!("[BlockTemplate] {}", error);
                                             }
                                         } else {

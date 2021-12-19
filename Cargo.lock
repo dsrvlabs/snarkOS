@@ -24,9 +24,9 @@ dependencies = [
 
 [[package]]
 name = "aleo-std"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1d4e9489665b431ea72e2b5f7f41f8eae2a93e3d8e1599b0581797ea51fb7579"
+checksum = "064ec11ce34a1748bbbae0fd9111e6cdcb2aa9eae714852da81eaa7cf864fc72"
 dependencies = [
  "aleo-std-storage",
  "aleo-std-time",

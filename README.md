@@ -2,10 +2,16 @@
 
 # Welcome to DSRV Pool.
 
->our mining pool always operated at **NO COST, NO COMMISSION!!** in Aleo Testnet2.
-Profit will be distributed fairly with Aleo Team's guide or recommendation.
+our mining pool always operated at **NO COST, NO COMMISSION!!** in Aleo Testnet2.
 
-Pool operator address
+Profit will be distributed fairly with Aleo Team's guide or recommendation.
+Currently, we have plan the reward distribution as follows.
+
+```
+prover's expected rewards = <prover's shares count> / <total shares count of our pool> * rewards for our pool
+```
+
+## Pool operator address
 ```
 aleo1dgxjkw2989xd97k5eeucv6uvtgst5g5hh62p65par466qhv5xczsslrr58
 ```
@@ -19,6 +25,7 @@ snarkos --prover <YOUR ALEO ADDRESS starting with aleo1> --pool 46.4.29.248:4132
 ``` 
 - Please read below detailed operation guide, If you are not familiar with running snarkOS.
 - Also, You can find more details on [snarkOS Github](https://github.com/AleoHQ/snarkOS)
+- THE POOL OPERATOR AND ALL POOL PARTICIPANTS that contribute to the pool for any length of time will be required to complete KYC.
 
 # DashBoard
 You can find the shares of our pool in below dashboard.

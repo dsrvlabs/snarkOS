@@ -25,8 +25,11 @@ You can find the shares of pool in below dashboard
 
 http://165.227.146.192:3000/d/80kP3L1nz/dsrv-aleo-testnet-pool?orgId=2
 
+![image](https://user-images.githubusercontent.com/83936146/149810805-44878991-9d3f-4f5b-85d7-099fc64502e0.png)
+
 ---
 
+# Operation Guide
 ## <a name='TableofContents'></a>Table of Contents
 
 * [1. Overview](#1-overview)
@@ -74,7 +77,7 @@ Please note to run an Aleo mining node that is **competitive**, the machine will
 
 Start by cloning the snarkOS Github repository:
 ```
-git clone https://github.com/dsrvlabs/snarkOS.git --depth 1
+git clone https://github.com/AleoHQ/snarkOS.git --depth 1
 ```
 
 Next, move into the snarkOS directory:
@@ -113,7 +116,7 @@ This will output a new Aleo account in the terminal.
 
 Then, Running snarkOS as prover
 ```
-snarkos --prover <YOUR ALEO ADDRESS starting with aleo1> --pool 46.4.29.248:4132 --trial --verbosity 2
+snarkos --prover <YOUR ALEO ADDRESS starting with aleo1> --pool 46.4.29.248:4132 --connect 46.4.29.248:4132 --trial --verbosity 2
 ```
 ```
 

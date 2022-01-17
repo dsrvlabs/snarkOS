@@ -17,11 +17,13 @@ Run snarkOS as below, You can join our mining pool.
 ```
 snarkos --prover <YOUR ALEO ADDRESS starting with aleo1> --pool 46.4.29.248:4132 --connect 46.4.29.248:4132 --trial --verbosity 2
 ``` 
-- Please read below instructions, If you are not familiar with running snarkOS.
+- Please read below detailed operation guide, If you are not familiar with running snarkOS.
 - Also, You can find more details on [snarkOS Github](https://github.com/AleoHQ/snarkOS)
 
 # DashBoard
-You can find the shares of pool in below dashboard
+You can find the shares of our pool in below dashboard.
+ - Pool status
+ - Prover status
 
 http://165.227.146.192:3000/d/80kP3L1nz/dsrv-aleo-testnet-pool?orgId=2
 

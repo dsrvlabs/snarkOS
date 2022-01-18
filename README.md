@@ -34,7 +34,7 @@ You can find the shares of our pool in below dashboard.
 
 http://165.227.146.192:3000/d/80kP3L1nz/dsrv-aleo-testnet-pool?orgId=2
 
-![image](https://user-images.githubusercontent.com/83936146/149810805-44878991-9d3f-4f5b-85d7-099fc64502e0.png)
+![image](https://user-images.githubusercontent.com/83936146/149894688-b9afeef5-829d-440f-9d36-f8de3386bfb1.png)
 
 ---
 

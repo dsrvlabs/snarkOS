@@ -2,6 +2,9 @@
 
 # Welcome to DSRV Pool.
 
+# Aleo Testnet2 was ended, Deprecated below informations.
+
+
 our mining pool always operated at **NO COST, NO COMMISSION!!** in Aleo Testnet2.
 
 Profit will be distributed fairly with Aleo Team's guide or recommendation.
